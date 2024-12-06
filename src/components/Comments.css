@@ -30,7 +30,7 @@
   display: flex;
   gap: 10px;
   padding: 10px;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   border-radius: 25px;
 }
 
@@ -42,7 +42,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0.5px 0.5px 4px 1px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0.5px 0.5px 4px 1px rgba(0, 0, 0, 0.2); */
   transition: background-color 0.3s ease;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .comments-checkbox.selected {
-  border: 2px solid #ffffff;
+  border: 2px solid #000000;
 }
 
 .comment-title {
@@ -78,7 +78,7 @@
 .comment-header {
   background-color: rgb(255, 255, 255);
   display: grid;
-  grid-template-columns: 1fr 4fr 1fr 0.6fr; /* 피드백 영역을 줄임 */
+  grid-template-columns: 1fr 4fr 1fr 0.6fr;
   text-align: left;
   padding: 10px 0;
   border-bottom: 3px solid black;
@@ -88,15 +88,19 @@
 
 .comment-row {
   display: grid;
-  grid-template-columns: 1fr 4fr 1fr 0.6fr; /* 피드백 영역을 줄임 */
+  grid-template-columns: 1fr 4fr 1fr 0.6fr;
   text-align: left;
   padding: 10px 0;
   border-bottom: 1px solid #e0e0e0;
-  font-weight: bold;
 }
 
-.comment-row {
-  font-weight: normal;
+.comment-link {
+  text-decoration: none;
+  color: black;
+}
+
+.comment-link:hover {
+  text-decoration: underline;
 }
 
 .comment-row:last-child {
@@ -107,11 +111,10 @@
   padding: 0 10px;
 }
 
-/* 감정에 따른 배경색 적용 - 텍스트에만 적용 */
 .sentiment-container {
-  display: inline-block; /* 텍스트 주변에만 배경을 적용하기 위해 사용 */
-  padding: 3px 5px; /* 텍스트 주변의 여백 조절 */
-  border-radius: 5px; /* 부드러운 모서리 */
+  display: inline-block;
+  padding: 3px 5px;
+  border-radius: 5px;
 }
 
 .sentiment-긍정 {

@@ -1,23 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Comments.css";
 
 const Comments = () => {
+  const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedSentiments, setSelectedSentiments] = useState({
     긍정: true,
     중립: true,
     부정: true,
   });
-
-  const totalComments = 21; // 총 댓글 개수 (예시)
-  const commentsPerPage = 7;
   const [feedbackMenuOpen, setFeedbackMenuOpen] = useState(null);
 
-  const comments = Array.from({ length: totalComments }, (_, i) => ({
-    date: `2024-11-${String(i + 1).padStart(2, "0")}`,
-    content: `댓글 내용 ${i + 1}`,
-    sentiment: i % 3 === 0 ? "긍정" : i % 3 === 1 ? "중립" : "부정",
-  }));
+  const commentsPerPage = 7;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.BASE_URL}data/comments.csv`
+        );
+        const text = await response.text();
+        const rows = text.split("\n").map((row) => row.split(","));
+        const parsedComments = rows.slice(1).map((row) => ({
+          date: row[0],
+          content: row[1],
+          link: row[2],
+          sentiment:
+            parseInt(row[3], 10) === 0
+              ? "긍정"
+              : parseInt(row[3], 10) === 1
+              ? "중립"
+              : "부정",
+        }));
+        setComments(parsedComments);
+      } catch (error) {
+        console.error("Error loading CSV data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // 선택된 감정에 따른 댓글 필터링
   const filteredComments = comments.filter(
@@ -54,9 +76,8 @@ const Comments = () => {
     const selectedCount =
       Object.values(selectedSentiments).filter(Boolean).length;
 
-    // 최소 1개 이상의 체크박스가 선택되어야 함
     if (selectedCount === 1 && selectedSentiments[sentiment]) {
-      return; // 체크박스 해제를 막음
+      return;
     }
 
     setSelectedSentiments((prev) => ({
@@ -64,7 +85,6 @@ const Comments = () => {
       [sentiment]: !prev[sentiment],
     }));
 
-    // 페이지를 1로 초기화하여 필터링된 결과를 첫 페이지부터 볼 수 있도록 함
     setCurrentPage(1);
   };
 
@@ -72,7 +92,6 @@ const Comments = () => {
     <div className="comments-container">
       <div className="comment-title">
         댓글 분석 결과
-        {/* 체크박스 패널 */}
         <div className="comments-checkbox-panel">
           <div
             className={`comments-checkbox ${
@@ -110,7 +129,16 @@ const Comments = () => {
         {displayedComments.map((comment, index) => (
           <div key={index} className="comment-row">
             <div className="col">{comment.date}</div>
-            <div className="col">{comment.content}</div>
+            <div className="col">
+              <a
+                href={comment.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="comment-link"
+              >
+                {comment.content}
+              </a>
+            </div>
             <div className="col">
               <span
                 className={`sentiment-container sentiment-${comment.sentiment.toLowerCase()}`}
