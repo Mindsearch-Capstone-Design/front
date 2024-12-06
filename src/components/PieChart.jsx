@@ -9,15 +9,15 @@ const PieChart = ({ hasData }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.BASE_URL}data/data-file.csv`
+          `${import.meta.env.BASE_URL}data/ratio.csv`
         );
         const text = await response.text();
         const rows = text.split("\n").map((row) => row.split(","));
 
         // Extract relevant ratios (5th column)
-        const positiveRatio = parseFloat(rows[1][4]) * 100; // 2번째 행, 5번째 열
-        const neutralRatio = parseFloat(rows[2][4]) * 100; // 3번째 행, 5번째 열
-        const negativeRatio = parseFloat(rows[3][4]) * 100; // 4번째 행, 5번째 열
+        const positiveRatio = parseFloat(rows[1][0]);
+        const neutralRatio = parseFloat(rows[2][0]);
+        const negativeRatio = parseFloat(rows[3][0]);
 
         setData([
           { id: "긍정", label: "긍정", value: positiveRatio, color: "#316dec" },

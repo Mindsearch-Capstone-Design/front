@@ -1,8 +1,64 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./LineGraph.css";
 import { ResponsiveLine } from "@nivo/line";
 
-const LineGraph = ({ data }) => {
+const LineGraph = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.BASE_URL}data/count.csv`
+        );
+        const text = await response.text();
+        const rows = text.split("\n").map((row) => row.split(","));
+
+        // 데이터 파싱 (2번째 행부터 시작)
+        const parsedData = rows.slice(1).map((row) => ({
+          date: row[0],
+          positive: parseInt(row[1], 10),
+          neutral: parseInt(row[2], 10),
+          negative: parseInt(row[3], 10),
+        }));
+
+        // LineGraph에 필요한 형식으로 데이터 변환
+        const formattedData = [
+          {
+            id: "긍정",
+            color: "#316dec",
+            data: parsedData.map((entry) => ({
+              x: entry.date,
+              y: entry.positive,
+            })),
+          },
+          {
+            id: "중립",
+            color: "#0f9b0f",
+            data: parsedData.map((entry) => ({
+              x: entry.date,
+              y: entry.neutral,
+            })),
+          },
+          {
+            id: "부정",
+            color: "#e93434",
+            data: parsedData.map((entry) => ({
+              x: entry.date,
+              y: entry.negative,
+            })),
+          },
+        ];
+
+        setData(formattedData);
+      } catch (error) {
+        console.error("Error loading CSV data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   if (!data || data.length === 0) {
     return (
       <div className="linegraph-container no-data">
