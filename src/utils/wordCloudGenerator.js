@@ -92,10 +92,10 @@ export const renderWordCloud = (text, elementId) => {
     },
     rotateRatio: 0, // 회전하지 않음, 가로로 길게 하기 위해 0으로 설정
     backgroundColor: "#ffffff",
-    drawOutOfBound: false, // 경계를 넘어가지 않도록 설정
-    minRotation: 0, // 회전 각도 최소값 (0도)
-    maxRotation: 0, // 회전 각도 최대값 (0도)
-    shape: "square", // 직사각형 형태로 만들기 위해 설정
+    drawOutOfBound: false, // 경계를 넘어가지 않도록
+    minRotation: 0,
+    maxRotation: 0,
+    shape: "square",
   };
 
   // 워드클라우드를 HTML 엘리먼트에 렌더링
