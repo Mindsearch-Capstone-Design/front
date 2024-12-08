@@ -7,13 +7,28 @@ import "./WordCloudRank.css";
 const WordCloudRank = ({ hasData }) => {
   const [selectedSentiment, setSelectedSentiment] = useState("긍정");
   const [wordCloudData, setWordCloudData] = useState("");
+  const [keywords, setKeywords] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await generateWordCloudData();
       if (data && selectedSentiment) {
-        console.log("WordCloudRank fetched data:", data);
-        setWordCloudData(data[selectedSentiment] || "");
+        const sentimentText = data[selectedSentiment] || "";
+        setWordCloudData(sentimentText);
+
+        // 키워드와 빈도 계산
+        const wordCounts = sentimentText.split(/\s+/).reduce((acc, word) => {
+          acc[word] = (acc[word] || 0) + 1;
+          return acc;
+        }, {});
+
+        // 상위 5개 키워드 추출
+        const sortedKeywords = Object.entries(wordCounts)
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 5)
+          .map(([word, count]) => ({ word, count }));
+
+        setKeywords(sortedKeywords);
       }
     };
 
@@ -62,7 +77,7 @@ const WordCloudRank = ({ hasData }) => {
       </div>
       <div className="rank-content">
         <h2 className="rank-title">키워드 순위</h2>
-        <Rank selectedSentiment={selectedSentiment} />
+        <Rank selectedSentiment={selectedSentiment} keywords={keywords} />
       </div>
     </div>
   );
