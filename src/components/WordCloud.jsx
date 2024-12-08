@@ -3,7 +3,7 @@ import "./WordCloud.css";
 import { renderWordCloud } from "../utils/wordCloudGenerator";
 
 const WordCloud = ({ data, hasData, size }) => {
-  const wordCloudRef = useRef(null); // 캔버스를 렌더링할 참조 설정
+  const wordCloudRef = useRef(null);
 
   useEffect(() => {
     console.log("WordCloud Data:", data);
@@ -28,13 +28,9 @@ const WordCloud = ({ data, hasData, size }) => {
     <div className="wordcloud-wrapper">
       <div
         className={`wordcloud-container ${size === "large" ? "large" : ""}`}
-        ref={wordCloudRef}
-      >
-        {/* WordCloud가 이 div에 렌더링됩니다 */}
-        <div className="wordcloud-contents">
-          <canvas id="wordCloudCanvas"></canvas>
-        </div>
-      </div>
+        ref={wordCloudRef} // DOM 참조 전달
+        style={{ width: "100%", height: "400px" }} // 크기 설정
+      ></div>
     </div>
   );
 };

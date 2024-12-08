@@ -53,7 +53,7 @@ export const generateWordCloudData = async () => {
 };
 
 // 워드클라우드를 생성하여 지정된 HTML 엘리먼트에 렌더링
-export const renderWordCloud = (text, elementId) => {
+export const renderWordCloud = (text, element) => {
   const wordCounts = d3.rollup(
     text.split(/\s+/),
     (v) => v.length,
@@ -62,44 +62,20 @@ export const renderWordCloud = (text, elementId) => {
 
   const entries = Array.from(wordCounts).map(([word, count]) => ({
     text: word,
-    size: count * 10, // 단어의 크기는 빈도에 비례
+    size: Math.min(count * 10, 100), // 단어 크기 상한 설정
   }));
 
   const options = {
     list: entries.map(({ text, size }) => [text, size]),
-    gridSize: 6, // 더 촘촘하게 배치
-    weightFactor: (size) => size, // 크기 조정 (단어의 빈도에 따라 크기 비례)
+    gridSize: 8, // 더 촘촘하게 배치
+    weightFactor: (size) => size * 2,
     fontFamily: "Nanum Gothic",
-    color: () => {
-      const colors = [
-        "#FF6F61",
-        "#6B5B95",
-        "#88B04B",
-        "#F7CAC9",
-        "#92A8D1",
-        "#955251",
-        "#B565A7",
-        "#009B77",
-        "#DD4124",
-        "#45B8AC",
-        "#EFC050",
-        "#5B5EA6",
-        "#9B2335",
-        "#DFCFBE",
-        "#55B4B0",
-      ];
-      return colors[Math.floor(Math.random() * colors.length)];
-    },
-    rotateRatio: 0, // 회전하지 않음, 가로로 길게 하기 위해 0으로 설정
-    backgroundColor: "#ffffff",
-    drawOutOfBound: false, // 경계를 넘어가지 않도록
-    minRotation: 0,
-    maxRotation: 0,
-    shape: "square",
+    color: () => d3.schemeCategory10[Math.floor(Math.random() * 10)],
+    rotateRatio: 0, // 단어 회전 비율
+    backgroundColor: "#ffffff", // 배경색
+    drawOutOfBound: false, // 경계 내로 제한
   };
 
-  // 워드클라우드를 HTML 엘리먼트에 렌더링
-  const element = document.getElementById(elementId);
   if (element) {
     WordCloud(element, options);
   }

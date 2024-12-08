@@ -1,43 +1,41 @@
-.wordcloud-component-container {
+.wordcloud-container {
   width: 100%;
-  height: 100%;
-  border-radius: 5px;
+  height: 400px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   background-color: white;
+  border-radius: 5px;
   overflow: hidden;
-}
-
-.wordcloud-component-container.large {
-  width: 100%;
-  height: 100%;
-}
-
-.wordcloud-component-wrapper {
-  border: 2px solid #000;
-  border-radius: 15px;
-  width: 100%;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border: 2px solid #ddd;
   box-sizing: border-box;
-  overflow: hidden;
-  margin: 0 auto;
+  margin-top: -150px;
+  margin-left: 20px;
+  border-radius: 25px;
 }
 
-.wordcloud-contents {
-  width: 85%; /* 부모 컨테이너의 85% 크기로 설정 */
-  height: 85%; /* 부모 컨테이너의 85% 크기로 설정 */
+.wordcloud-container.large {
+  height: 400px;
+}
+
+.no-data {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #888;
 }
 
-#wordCloudCanvas {
+.no-data-text {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #888;
+}
+
+.wordcloud-wrapper {
   width: 100%;
   height: 100%;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
