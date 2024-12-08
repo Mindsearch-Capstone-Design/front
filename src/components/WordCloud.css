@@ -1,30 +1,41 @@
 .wordcloud-container {
-  border-radius: 5px;
   width: 100%;
-  height: 100%;
+  height: 400px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   background-color: white;
-  margin-top: -50px;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 2px solid #ddd;
+  box-sizing: border-box;
+  margin-top: -150px;
+  margin-left: 20px;
+  border-radius: 25px;
 }
 
 .wordcloud-container.large {
-  width: 100%;
-  height: 100%;
+  height: 400px;
+}
+
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #888;
+}
+
+.no-data-text {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #888;
 }
 
 .wordcloud-wrapper {
-  border: 2px solid #000;
-  border-radius: 15px;
   width: 100%;
-  height: 75%;
+  height: 100%;
   display: flex;
-  margin-left: 0px;
-  padding-top: 30px;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
-  overflow: hidden;
 }

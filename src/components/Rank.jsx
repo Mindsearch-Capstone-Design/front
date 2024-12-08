@@ -1,7 +1,7 @@
 import React from "react";
 import "./Rank.css";
 
-const Rank = ({ selectedSentiment }) => {
+const Rank = ({ selectedSentiment, keywords }) => {
   const getBackgroundColor = () => {
     if (selectedSentiment === "긍정") {
       return "rgb(186, 227, 255)";
@@ -16,36 +16,15 @@ const Rank = ({ selectedSentiment }) => {
   return (
     <div className="rank-container">
       <ul className="rank-list">
-        <li
-          className="rank-word"
-          style={{ backgroundColor: getBackgroundColor() }}
-        >
-          1위: 키워드1
-        </li>
-        <li
-          className="rank-word"
-          style={{ backgroundColor: getBackgroundColor() }}
-        >
-          2위: 키워드2
-        </li>
-        <li
-          className="rank-word"
-          style={{ backgroundColor: getBackgroundColor() }}
-        >
-          3위: 키워드3
-        </li>
-        <li
-          className="rank-word"
-          style={{ backgroundColor: getBackgroundColor() }}
-        >
-          4위: 키워드4
-        </li>
-        <li
-          className="rank-word"
-          style={{ backgroundColor: getBackgroundColor() }}
-        >
-          5위: 키워드5
-        </li>
+        {keywords.map((keyword, index) => (
+          <li
+            key={index}
+            className="rank-word"
+            style={{ backgroundColor: getBackgroundColor() }}
+          >
+            {index + 1}위: {keyword.word} ({keyword.count}회)
+          </li>
+        ))}
       </ul>
     </div>
   );

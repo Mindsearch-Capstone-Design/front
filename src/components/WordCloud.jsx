@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./WordCloud.css";
-import PositiveImage from "./images/positive.png";
-import NeutralImage from "./images/neutral.png";
-import NegativeImage from "./images/negative.png";
+import { renderWordCloud } from "../utils/wordCloudGenerator";
 
-const WordCloud = ({ title, hasData, size }) => {
-  if (!hasData) {
+const WordCloud = ({ data, hasData, size }) => {
+  const wordCloudRef = useRef(null);
+
+  useEffect(() => {
+    console.log("WordCloud Data:", data);
+    if (hasData && data && wordCloudRef.current) {
+      renderWordCloud(data, wordCloudRef.current);
+    }
+  }, [data, hasData]);
+
+  if (!hasData || !data || data.length === 0) {
     return (
       <div
         className={`wordcloud-container no-data ${
@@ -17,28 +24,13 @@ const WordCloud = ({ title, hasData, size }) => {
     );
   }
 
-  const imageSrc =
-    title === "긍정"
-      ? PositiveImage
-      : title === "중립"
-      ? NeutralImage
-      : NegativeImage;
-
-  const containerClassName = `wordcloud-container ${
-    size === "large" ? "large" : ""
-  }`;
-
   return (
     <div className="wordcloud-wrapper">
-      <div className={containerClassName}>
-        <div className="wordcloud-content">
-          <img
-            src={imageSrc}
-            alt={`${title} 이미지`}
-            className="wordcloud-image"
-          />
-        </div>
-      </div>
+      <div
+        className={`wordcloud-container ${size === "large" ? "large" : ""}`}
+        ref={wordCloudRef} // DOM 참조 전달
+        style={{ width: "100%", height: "400px" }} // 크기 설정
+      ></div>
     </div>
   );
 };
