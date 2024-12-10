@@ -3,6 +3,7 @@ import "./Header.css";
 import HeaderLogo from "./images/TeamLogo.png";
 import InstagramLogo from "./images/instagram.png";
 import YoutubeLogo from "./images/youtube.png";
+import FacebookLogo from "./images/facebook.png"; // 페이스북 로고 추가
 import SearchIcon from "./images/search.png";
 
 const Header = ({ onSearch }) => {
@@ -24,7 +25,7 @@ const Header = ({ onSearch }) => {
       alert("플랫폼을 선택하세요");
       return;
     }
-    onSearch(startDate, endDate);
+    onSearch(startDate, endDate, platform, keyword); // 플랫폼 및 키워드 추가 전달
   };
 
   const handleEnterPress = (e) => {
@@ -71,11 +72,21 @@ const Header = ({ onSearch }) => {
               {platform ? (
                 <>
                   <img
-                    src={platform === "youtube" ? YoutubeLogo : InstagramLogo}
+                    src={
+                      platform === "youtube"
+                        ? YoutubeLogo
+                        : platform === "instagram"
+                        ? InstagramLogo
+                        : FacebookLogo
+                    }
                     alt={platform}
                     className="dropdown-selected-icon"
                   />
-                  {platform === "youtube" ? "유튜브" : "인스타그램"}
+                  {platform === "youtube"
+                    ? "유튜브"
+                    : platform === "instagram"
+                    ? "인스타그램"
+                    : "페이스북"}
                 </>
               ) : (
                 "플랫폼"
@@ -103,6 +114,17 @@ const Header = ({ onSearch }) => {
                   className="dropdown-icon"
                 />
                 인스타그램
+              </div>
+              <div
+                className="dropdown-item"
+                onClick={() => setPlatform("facebook")}
+              >
+                <img
+                  src={FacebookLogo}
+                  alt="Facebook Logo"
+                  className="dropdown-icon"
+                />
+                페이스북
               </div>
             </div>
           </div>
