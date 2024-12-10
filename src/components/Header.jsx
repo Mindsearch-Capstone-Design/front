@@ -3,16 +3,17 @@ import "./Header.css";
 import HeaderLogo from "./images/TeamLogo.png";
 import InstagramLogo from "./images/instagram.png";
 import YoutubeLogo from "./images/youtube.png";
-import FacebookLogo from "./images/facebook.png"; // 페이스북 로고 추가
 import SearchIcon from "./images/search.png";
 
-const Header = ({ onSearch }) => {
+
+const Header = ({ onSearchComplete }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [keyword, setKeyword] = useState("");
   const [platform, setPlatform] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!startDate || !endDate) {
       alert("기간을 설정하세요");
       return;
@@ -25,7 +26,41 @@ const Header = ({ onSearch }) => {
       alert("플랫폼을 선택하세요");
       return;
     }
-    onSearch(startDate, endDate, platform, keyword); // 플랫폼 및 키워드 추가 전달
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/crawl", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account: keyword,
+          start_date: startDate,
+          end_date: endDate,
+          platform: platform
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`오류 발생: ${errorData.detail}`);
+        return;
+      }
+
+      const data = await response.json();
+      alert(`${data.comments_count}개의 댓글이 성공적으로 저장되었습니다.`);
+
+      if (onSearchComplete) {
+        onSearchComplete(data);
+      }
+    } catch (error) {
+      console.error("요청 중 오류 발생:", error);
+      alert("크롤링 요청 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEnterPress = (e) => {
@@ -72,21 +107,11 @@ const Header = ({ onSearch }) => {
               {platform ? (
                 <>
                   <img
-                    src={
-                      platform === "youtube"
-                        ? YoutubeLogo
-                        : platform === "instagram"
-                        ? InstagramLogo
-                        : FacebookLogo
-                    }
+                    src={platform === "youtube" ? YoutubeLogo : InstagramLogo}
                     alt={platform}
                     className="dropdown-selected-icon"
                   />
-                  {platform === "youtube"
-                    ? "유튜브"
-                    : platform === "instagram"
-                    ? "인스타그램"
-                    : "페이스북"}
+                  {platform === "youtube" ? "유튜브" : "인스타그램"}
                 </>
               ) : (
                 "플랫폼"
@@ -115,17 +140,6 @@ const Header = ({ onSearch }) => {
                 />
                 인스타그램
               </div>
-              <div
-                className="dropdown-item"
-                onClick={() => setPlatform("facebook")}
-              >
-                <img
-                  src={FacebookLogo}
-                  alt="Facebook Logo"
-                  className="dropdown-icon"
-                />
-                페이스북
-              </div>
             </div>
           </div>
         </div>
@@ -140,8 +154,10 @@ const Header = ({ onSearch }) => {
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={handleEnterPress}
           />
-          <button className="input-button" onClick={handleSearch}>
-            <img src={SearchIcon} alt="Search Icon" className="search-icon" />
+          <button className="input-button" onClick={handleSearch} disabled={loading}>
+            {loading ? "검색 중..." : (
+              <img src={SearchIcon} alt="Search Icon" className="search-icon" />
+            )}
           </button>
         </div>
       </div>
