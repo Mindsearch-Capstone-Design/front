@@ -52,7 +52,7 @@
 }
 
 input[type="radio"] {
-  display: none; /* 기본 라디오 버튼은 숨김 */
+  display: none;
 }
 
 label {
