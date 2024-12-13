@@ -71,7 +71,7 @@ export const renderWordCloud = (text, element) => {
     weightFactor: (size) => size * 2,
     fontFamily: "Nanum Gothic",
     color: () => d3.schemeCategory10[Math.floor(Math.random() * 10)],
-    rotateRatio: 0, // 단어 회전 비율
+    rotateRatio: 0,
     backgroundColor: "#ffffff", // 배경색
     drawOutOfBound: false, // 경계 내로 제한
   };
